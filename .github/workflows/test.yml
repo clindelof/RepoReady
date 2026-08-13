@@ -21,4 +21,4 @@ jobs:
       - run: python -m pip install --upgrade pip
       - run: python -m pip install -e . pytest
       - run: pytest
-
+      - run: repoready scan . --fail-on block

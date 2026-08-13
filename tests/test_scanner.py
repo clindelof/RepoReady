@@ -17,9 +17,15 @@ def repository(tmp_path: Path) -> Path:
     for name, content in {
         "README.md": "# Example\n",
         "LICENSE": "Example license\n",
+        "CONTRIBUTING.md": "# Contributing\n",
+        "SECURITY.md": "# Security\n",
+        "CODE_OF_CONDUCT.md": "# Conduct\n",
+        "CHANGELOG.md": "# Changelog\n",
         ".gitignore": ".env\n",
         "tests/test_example.py": "def test_example(): assert True\n",
         ".github/workflows/test.yml": "name: test\n",
+        ".github/ISSUE_TEMPLATE/bug_report.yml": "name: Bug\ndescription: Bug report\n",
+        ".github/PULL_REQUEST_TEMPLATE.md": "# Pull request\n",
     }.items():
         target = tmp_path / name
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -41,7 +47,7 @@ def test_tracked_env_blocks_publication(tmp_path: Path) -> None:
     git(root, "commit", "-qm", "add environment")
     report = scan_repository(root)
     assert report.result == "BLOCK"
-    assert any(item.check == "sensitive-paths" and item.severity == "BLOCK" for item in report.findings)
+    assert any(item.check == "tracked-sensitive-paths" and item.severity == "BLOCK" for item in report.findings)
 
 
 def test_deleted_sensitive_file_is_found_in_history(tmp_path: Path) -> None:
@@ -55,7 +61,7 @@ def test_deleted_sensitive_file_is_found_in_history(tmp_path: Path) -> None:
     git(root, "add", "-u")
     git(root, "commit", "-qm", "remove fixture")
     report = scan_repository(root)
-    assert any(item.check == "git-history" and item.severity == "BLOCK" for item in report.findings)
+    assert any(item.check == "history-sensitive-paths" and item.severity == "BLOCK" for item in report.findings)
 
 
 def test_secret_value_is_never_in_report(tmp_path: Path) -> None:
@@ -68,4 +74,3 @@ def test_secret_value_is_never_in_report(tmp_path: Path) -> None:
     rendered = str(report.to_dict())
     assert report.result == "BLOCK"
     assert value not in rendered
-

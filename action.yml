@@ -1,0 +1,28 @@
+name: RepoReady
+description: Privacy-first publication readiness checks for Git repositories
+inputs:
+  path:
+    description: Repository path to scan
+    default: .
+  fail-on:
+    description: Threshold that fails the action (warn, block, or never)
+    default: block
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - name: Install RepoReady
+      shell: bash
+      run: python -m pip install "$GITHUB_ACTION_PATH"
+    - name: Scan repository
+      shell: bash
+      env:
+        REPOREADY_INPUT_PATH: ${{ inputs.path }}
+        REPOREADY_FAIL_ON: ${{ inputs.fail-on }}
+      run: repoready scan "$REPOREADY_INPUT_PATH" --fail-on "$REPOREADY_FAIL_ON"
+branding:
+  icon: shield
+  color: green
+

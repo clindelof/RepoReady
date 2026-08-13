@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "repoready"
-version = "0.1.0"
+version = "0.2.0"
 description = "A privacy-first preflight check for publishing Git repositories."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -17,6 +17,7 @@ classifiers = [
   "Programming Language :: Python :: 3",
   "Topic :: Software Development :: Quality Assurance",
 ]
+dependencies = ["tomli>=2; python_version < '3.11'"]
 
 [project.scripts]
 repoready = "repoready.cli:main"
@@ -27,4 +28,3 @@ where = ["src"]
 [tool.pytest.ini_options]
 addopts = "-q"
 testpaths = ["tests"]
-

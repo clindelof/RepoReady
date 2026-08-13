@@ -1,0 +1,18 @@
+[policy]
+require_license = true
+require_tests = true
+require_ci = true
+require_contributing = true
+require_security_policy = true
+require_code_of_conduct = true
+require_issue_templates = true
+require_pull_request_template = true
+require_changelog = true
+
+[paths]
+allow = ["tests/**"]
+block = []
+
+[secrets]
+allow_rules = []
+
